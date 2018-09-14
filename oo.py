@@ -20,7 +20,8 @@ class Question(object):
 
         return answer == self.answer
 
-class Exam(object):
+
+class Evaluation(object):
 
     def __init__(self, name):
         self.name = name
@@ -28,6 +29,9 @@ class Exam(object):
 
     def add_question(self, question):
         self.questions.append(question) 
+
+
+class Exam(Evaluation):
 
     def administer(self):
         counter = 0
@@ -44,6 +48,25 @@ class Exam(object):
         # print("Your score is {}".format(100 * score / len(self.questions)))
 
 
+class Quiz(Evaluation):
+
+    def administer(self):
+        counter = 0
+        score = 0
+
+        for question in self.questions:
+            is_correct = question.ask_and_evaluate()
+            counter += 1
+            if is_correct:
+                score += 1
+
+        if score / counter >= 0.5:
+            print("You passed the quiz!")
+            return 1
+        print("Sorry - you failed the quiz")
+        return 0
+
+
 class StudentExam:
     score = float()
 
@@ -57,7 +80,7 @@ class StudentExam:
 
 
 def example():
-    midterm = Exam("midterm")
+    midterm = Quiz("midterm")
     question1 = Question("What color is the sky?", "Blue")
     question2 = Question("Whats your favorite coding language?", "Python")
     midterm.add_question(question1)
